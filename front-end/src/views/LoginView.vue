@@ -1,43 +1,77 @@
 <template>
-    <div class="login-view">
-        <q-form class="login-view-form">
-            <h1 class="text-h2 text-center">Iniciar Sesión</h1>
-            <h2 class="text-h4 text-center">Ingresa para comprar</h2>
-            <q-input label="Correo" class="margin-bottom"></q-input>
-            <q-input label="Contraseña" class="margin-bottom"></q-input>        
-            <q-btn label="Login" class="button-center" color="teal"></q-btn>
-        </q-form>
-    </div>
+  <div class="login-view">
+    <q-form class="login-view-form">
+      <div class="text-h2 text-center text-bold q-mb-md">Iniciar Sesión</div>
+      <div class="text-h4 text-center q-mb-md">Ingresa para comprar</div>
+      <q-input label="Correo" class="margin-bottom" v-model="email"></q-input>
+      <q-input
+        label="Contraseña"
+        class="margin-bottom"
+        v-model="password"
+      ></q-input>
+      <q-btn
+        label="Login"
+        class="button-center"
+        color="teal"
+        @click="handleLogin"
+      ></q-btn>
+    </q-form>
+  </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStoreSession } from "@/store/session";
 
 export default defineComponent({
-    name: "LoginView",
+  name: "LoginView",
+  setup() {
+    const email = ref("yavb@gmail.com");
+    const password = ref("123456");
+
+    const storeSession = useStoreSession();
+    const router = useRouter();
+
+    const handleLogin = async () => {
+      const responseLogin = await storeSession.fetchLogin({
+        correo: email.value,
+        contrasena: password.value,
+      });
+
+      if (responseLogin) {
+        router.push({ name: "AdminLayout" });
+      }
+    };
+
+    return {
+      password,
+      email,
+      handleLogin,
+    };
+  },
 });
 </script>
 
 <style scoped>
-.login-view{
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(to left, #FFFFFF, #FFEFBA)
+.login-view {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  padding-top: 150px;
+  justify-content: center;
 }
 
-.login-view-form{
-    min-width: 600px;
+.login-view-form {
+  min-width: 600px;
 }
 
-.margin-bottom{
-    margin-bottom: 10px;
+.margin-bottom {
+  margin-bottom: 10px;
 }
 
-.button-center{
-    margin: 0 auto;
-    display: flex;
+.button-center {
+  margin: 0 auto;
+  display: flex;
 }
 </style>
