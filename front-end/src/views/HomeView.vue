@@ -20,7 +20,7 @@
                 label="comprar"
                 flat
                 color="negative"
-                path="/usuario"
+                href="https://api.whatsapp.com/send?phone=51940192870&text=%C2%A1Hola!%20Estoy%20interesad@%20en%20vender%20un%20producto%20en%20Artky."
               />
             </div>
             <div class="text-center">

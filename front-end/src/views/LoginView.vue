@@ -3,12 +3,12 @@
     <q-form class="login-view-form">
       <div class="text-h2 text-center text-bold q-mb-md">Iniciar Sesión</div>
       <div class="text-h4 text-center q-mb-md">Ingresa para comprar</div>
-      <q-input type="correo" label="Correo" class="margin-bottom" v-model="email"></q-input>
+      <q-input label="Correo" class="margin-bottom" type="email" v-model="email"></q-input>
       <q-input
         label="Contraseña"
         class="margin-bottom"
         v-model="password"
-        type="password"
+        type="password" 
       ></q-input>
       <q-btn
         label="Login"
@@ -24,14 +24,17 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStoreSession } from "@/store/session";
+import { TYPE_USER_ADMIN } from "@/constants";
 
 export default defineComponent({
   name: "LoginView",
   setup() {
-    const email = ref("yavb@gmail.com");
-    const password = ref("123456"); 
+    const email = ref("");
+    const password = ref("");
+
     const storeSession = useStoreSession();
     const router = useRouter();
+
     const handleLogin = async () => {
       const responseLogin = await storeSession.fetchLogin({
         correo: email.value,
@@ -39,7 +42,12 @@ export default defineComponent({
       });
 
       if (responseLogin) {
-        router.push({ name: "AdminLayout" });
+        router.push({
+          name:
+            responseLogin.typeUser == TYPE_USER_ADMIN
+              ? "AdminLayout"
+              : "Mainlayout",
+        });
       }
     };
 

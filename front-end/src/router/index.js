@@ -38,15 +38,20 @@ const routes = [
     ],
   },
   {
-    path: "/usuario",
+    path: "/admin",
     name: "AdminLayout",
     component: AdminLayout,
-    redirect: () => ({ name: "Usuario" }),
+    redirect: () => ({ name: "HomeAdmin" }),
     children: [
       {
         path: "",
-        name: "Usuario",
+        name: "HomeAdmin",
         component: UsuarioView,
+      },
+      {
+        path: "register",
+        name: "RegisterAdmin",
+        component: RegisterView,
       },
     ],
   },
@@ -63,6 +68,13 @@ router.beforeEach((to, from, next) => {
   if (to.path === "/login" && storeSession.getIsLogin) {
     next({ path: "/" });
     return;
+  }
+
+  if (
+    !storeSession.getIsAdmin &&
+    ["AdminLayout", "HomeAdmin", "RegisterAdmin"].includes(to.name)
+  ) {
+    next({ path: "/" });
   }
 
   next();

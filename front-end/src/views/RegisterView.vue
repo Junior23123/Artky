@@ -2,7 +2,9 @@
   <div class="Register-view">
     <q-form class="Register-view-form" @submit.prevent="handleFormRegister">
       <div class="text-h2 text-center text-bold q-mb-md">Registro</div>
-      <div class="text-h4 text-center q-mb-md">Registrate para comprar</div>
+      <div v-if="!isAdmin" class="text-h4 text-center q-mb-md">
+        Registrate para comprar
+      </div>
       <q-input
         v-model="name"
         required
@@ -18,6 +20,7 @@
       <q-input
         v-model="email"
         label="Correo"
+        type="email"
         required
         class="margin-bottom"
       ></q-input>
@@ -25,8 +28,16 @@
         v-model="password"
         label="Contraseña"
         class="margin-bottom"
+        type="password"
         required
       ></q-input>
+      <q-select
+        v-if="isAdmin"
+        v-model="typeUser"
+        label="Tipo de Usuario"
+        class="margin-bottom"
+        :options="typeUserOptions"
+      />
       <q-btn
         label="Register"
         type="submit"
@@ -38,9 +49,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStoreSession } from "@/store/session";
 import { useRouter } from "vue-router";
+import { TYPE_USER_ADMIN, TYPE_USER_CLIENT } from "@/constants";
 
 export default defineComponent({
   name: "RegistroView",
@@ -52,6 +64,13 @@ export default defineComponent({
     const lastName = ref();
     const email = ref();
     const password = ref();
+    //1 -> cliente
+    //0 -> Admin
+    const typeUser = ref({ label: "Cliente", value: TYPE_USER_CLIENT });
+    const typeUserOptions = ref([
+      { label: "Cliente", value: TYPE_USER_CLIENT },
+      { label: "Administrador", value: TYPE_USER_ADMIN },
+    ]);
 
     const handleFormRegister = async () => {
       const responseCreateUser = await sessionStore.fetchCreateUser({
@@ -59,6 +78,7 @@ export default defineComponent({
         apellidos: lastName.value,
         correo: email.value,
         contrasena: password.value,
+        tipo_usuario: typeUser.value.value,
       });
 
       if (responseCreateUser) {
@@ -66,7 +86,20 @@ export default defineComponent({
       }
     };
 
-    return { handleFormRegister, name, lastName, email, password };
+    const isAdmin = computed(() => {
+      return sessionStore.getIsAdmin;
+    });
+
+    return {
+      handleFormRegister,
+      name,
+      lastName,
+      email,
+      password,
+      typeUser,
+      isAdmin,
+      typeUserOptions,
+    };
   },
 });
 </script>

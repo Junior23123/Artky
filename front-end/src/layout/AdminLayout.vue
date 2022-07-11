@@ -11,20 +11,44 @@
           class="q-mr-sm"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-toolbar-title class="cursor-pointer" @click="handleClickLogo"> Artky </q-toolbar-title>
+        <q-toolbar-title class="cursor-pointer" @click="handleClickLogo">
+          Artky
+        </q-toolbar-title>
         <div v-if="$q.screen.width > 600">
           <ButtonLogout />
         </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer persistent v-model="leftDrawerOpen" side="left" bordered class="bg-grey-3">
+    <q-drawer
+      persistent
+      v-model="leftDrawerOpen"
+      side="left"
+      bordered
+      class="bg-grey-3"
+    >
       <q-list padding class="menu-list">
-        <q-item clickable v-ripple>
+        <q-item
+          clickable
+          v-ripple
+          to="/admin"
+          :active="$route.path == '/admin'"
+        >
           <q-item-section avatar>
             <q-icon name="home" />
           </q-item-section>
           <q-item-section> Panel</q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          v-ripple
+          to="/admin/register"
+          :active="$route.path == '/admin/register'"
+        >
+          <q-item-section avatar>
+            <q-icon name="person" />
+          </q-item-section>
+          <q-item-section> Registrar</q-item-section>
         </q-item>
       </q-list>
     </q-drawer>

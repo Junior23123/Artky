@@ -22,7 +22,7 @@
     <div class="catalogue-product">
       <div class="catalogue-product-title">Catálogo de Artesanía</div>
       <div class="text-center">
-        <ButtonBuyProduct  rounded color="negative" label="Comprar" path="/usuario" />
+        <ButtonBuyProduct  rounded color="negative" label="Comprar" path="/"/>
       </div>
 
       <div class="catalogue-product-grid">

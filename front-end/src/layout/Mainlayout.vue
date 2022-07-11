@@ -11,7 +11,7 @@
           class="q-mr-sm"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-toolbar-title class="cursor-pointer" @click="handleClickLogo"> Artky </q-toolbar-title>
+        <q-toolbar-title class="cursor-pointer" @click="handleClickLogo" > Artky </q-toolbar-title>
         <div v-if="$q.screen.width > 600">
           <q-btn
             v-for="link in links"
@@ -21,6 +21,7 @@
             :to="link.path"
             class="q-ml-sm"
           />
+          <ButtonCart/>
           <ButtonLogout v-if="sessionStore.getIsLogin" />
         </div>
       </q-toolbar>
@@ -48,6 +49,7 @@
 
           <q-item-section> {{ link.label }} </q-item-section>
         </q-item>
+        <ButtonCart class="q-ml-sm"/>
         <ButtonLogout v-if="sessionStore.getIsLogin" />
       </q-list>
     </q-drawer>
@@ -61,6 +63,7 @@
 <script>
 import { computed, defineComponent, ref } from "@vue/runtime-core";
 import ButtonLogout from "@/components/ButtonLogout.vue";
+import ButtonCart from "@/components/ButtonCart.vue";
 import { useStoreSession } from "@/store/session";
 import { useRouter } from "vue-router";
 
@@ -68,6 +71,7 @@ export default defineComponent({
   name: "MainLayout",
   components: {
     ButtonLogout,
+    ButtonCart
   },
   setup() {
     const linksTopBar = [
