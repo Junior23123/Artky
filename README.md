@@ -51,11 +51,13 @@ Librerías:
 - Werkzeug.security:<br>
   Esta libreria basicamente la hemos usado para hashear la contraseña.<br>
 - Flask_Migrate<br>
+- Pinia<br>
 <br>
 Frameworks:<br>
 - JS -> Java Script <br>
 - Python<br>
 - Flask<br>
+- Quasar<br>
 <br>
 Frontend:<br>
 - Formatos json:<br>
