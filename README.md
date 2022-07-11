@@ -69,8 +69,7 @@ Frontend:<br>
 - Dependencia yarn.lock<br>
 <br>
 
-Database:
-- Postgresql
+Database: Postgresql
 <br>
 Licencia: MIT<br>
 <br>
