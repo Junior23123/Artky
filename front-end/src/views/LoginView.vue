@@ -3,11 +3,12 @@
     <q-form class="login-view-form">
       <div class="text-h2 text-center text-bold q-mb-md">Iniciar Sesión</div>
       <div class="text-h4 text-center q-mb-md">Ingresa para comprar</div>
-      <q-input label="Correo" class="margin-bottom" v-model="email"></q-input>
+      <q-input type="correo" label="Correo" class="margin-bottom" v-model="email"></q-input>
       <q-input
         label="Contraseña"
         class="margin-bottom"
         v-model="password"
+        type="password"
       ></q-input>
       <q-btn
         label="Login"
@@ -28,11 +29,9 @@ export default defineComponent({
   name: "LoginView",
   setup() {
     const email = ref("yavb@gmail.com");
-    const password = ref("123456");
-
+    const password = ref("123456"); 
     const storeSession = useStoreSession();
     const router = useRouter();
-
     const handleLogin = async () => {
       const responseLogin = await storeSession.fetchLogin({
         correo: email.value,
