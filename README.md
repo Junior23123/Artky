@@ -51,7 +51,6 @@ Librerías:
 - Werkzeug.security:<br>
   Esta libreria basicamente la hemos usado para hashear la contraseña.<br>
 - Flask_Migrate<br>
-- Psycopg2<br>
 <br>
 Frameworks:<br>
 - JS -> Java Script <br>
