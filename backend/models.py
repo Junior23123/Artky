@@ -27,13 +27,14 @@ database_path = 'postgresql://{}:{}@{}/{}'.format('postgres','carro', 'localhost
 
 db = SQLAlchemy()
 
+
 def setup_db(app, database_path = database_path):
     app.config['SQLALCHEMY_DATABASE_URI'] = database_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
     db.create_all()
-
+    app.secret_key = 'cairocoders-ednalan'
 class Register(UserMixin,db.Model):
     __tablename__= 'registros'
     id = db.Column(db.Integer, primary_key=True)
@@ -41,9 +42,10 @@ class Register(UserMixin,db.Model):
     apellidos = db.Column(db.String(50), nullable=False)
     correo = db.Column(db.String(50), nullable=False)
     contrasena = db.Column(db.String(128), nullable=False)    
+    tipo_usuario = db.Column(db.String(128), nullable=False)
 
     def __repr__(self):
-        return f'Register:{self.id},{self.nombres}, {self.apellidos}, {self.correo}, {self.contrasena}'
+        return f'Register:{self.id},{self.nombres}, {self.apellidos}, {self.correo}, {self.contrasena}, {self.tipo_usuario}'
 
 class Catalogo(db.Model):
     __tablename__ = 'catalogos'

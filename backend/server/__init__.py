@@ -25,10 +25,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import Register, Catalogo, Categoria, setup_db, db
 PELICULAS_PER_PAGE=5
 
-def paginate_peliculas(request, selection):
-    #TODO
-    pass
-
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
@@ -37,7 +33,7 @@ def create_app(test_config=None):
     ##ojo esto
     db = SQLAlchemy(app)
     login_manager = LoginManager()
-
+    app.secret_key = 'cairocoders-ednalan'
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-type, Authorizations, true')
@@ -49,13 +45,14 @@ def create_app(test_config=None):
         correo = request.json['correo']
         contrasena = request.json['contrasena']
         user = Register.query.filter_by(correo=correo).first()
-        print(correo,contrasena)
+        print(user)
         if not user or not check_password_hash(user.contrasena, contrasena):
             flash('Por favor revise sus datos e intentelo de nuevo')
             return jsonify({"message": "user not found", "status": 404}), 404
         # login_user(user)
-        return jsonify({"message": "success", "status": 200, "data": {"name": user.nombres, "email": user.correo}}), 200
-
+        return jsonify({"message": "success", "status": 200, "data": {"name": user.nombres,
+                                                                    "email": user.correo,
+                                                                    "typeUser": user.tipo_usuario}}), 200
 
     # Ruta de la sesion de usurios
 
@@ -74,9 +71,10 @@ def create_app(test_config=None):
             apellidos = request.json['apellidos']
             correo = request.json['correo']
             contrasena = request.json['contrasena']
+            tipo_usuario = request.json['tipo_usuario']
             _hashed_password = generate_password_hash(contrasena)
             registro = Register(nombres=nombres, apellidos=apellidos,
-                                correo=correo, contrasena=_hashed_password)
+                                correo=correo, contrasena=_hashed_password, tipo_usuario=tipo_usuario)
             db.session.add(registro)
             db.session.commit()
             db.session.commit()
@@ -87,69 +85,10 @@ def create_app(test_config=None):
         finally:
             db.session.close()
             return jsonify({"message": "success", "status": 201}), 201
-    # Ruta usuario
 
 
-    # @app.route('/usuario')
-    # # @login_required
-    # def usuario():
-    #     if 'loggedin' in session:
-    #         return render_template('usuario.html', correo=session['correo'],
-    #                                productos=Categoria.query.all(),
-    #                                nombres=current_user.nombres)
 
-    #     return render_template("usuario.html",
-    #                            catalogos=Catalogo.query.all(), nombres=current_user.nombres, productos=Categoria.query.all())
-
-    # Ruta de categorias
-
-
-    @app.route('/categoria/<list_id>', methods=['GET'])
-    # @login_required
-    def get_list_categorias(list_id):
-        return render_template('usuario.html',
-                            productos=Categoria.query.all(),
-                            active_list=Catalogo.query.get(list_id),
-                            catalogos=Catalogo.query.filter_by(
-                                list_id=list_id).order_by('id').all()
-                            )
-    # Ruta de administrador
-
-
-    @app.route('/admin')
-    def admin():
-        if 'loggedin' in session:
-            return render_template('admin.html', correo=session['correo'],
-                                catalogos=Catalogo.query.all(),
-                                categorias=Categoria.query.order_by('id').all(),
-                                nombres=current_user.nombres)
-
-        return render_template("admin.html",
-                            catalogos=Catalogo.query.all(), nombres=current_user.nombres, productos=Categoria.query.all())
-    # Ruta para categorias del administrador
-
-
-    @app.route('/admin/categoria/<list_id>', methods=['GET'])
-    # @login_required
-    def get_list_categorias_admin(list_id):
-        return render_template('admin.html',
-                            categoria=Categoria.query.order_by('id').all(),
-                            catalogos=Catalogo.query.filter_by(
-                                list_id=list_id).order_by('id').all()
-                            )
-
-
-    # Ruta para eliminar Catalogos desde administrador
-    @app.route('/delete/<id>', methods=['GET', 'POST'])
-    # @login_required
-    def delete(id):
-        my_data = Catalogo.query.get(id)
-        db.session.delete(my_data)
-        db.session.commit()
-        return redirect(url_for('admin'))
-
-
-    @app.route('/create', methods=['GET', 'POST'])
+    @app.route('/category', methods=['POST'])
     # @login_required
     def createCategoria():
         if request.method == 'POST':
@@ -161,50 +100,73 @@ def create_app(test_config=None):
                 flash('Categoria creada')
             except:
                 db.session.rollback()
-                abort(500)
+                return jsonify({"message": "error server", "status": 500}), 500
             finally:
-                return redirect(url_for('admin'))
+                db.session.close()
+                return jsonify({"message": "success", "status": 201}), 201
 
 
-    @app.route('/createProducto', methods=['GET', 'POST'])
+    @app.route('/category', methods=['GET'])
+    # @login_required
+    def getCategorias():
+        try:
+            cols = ['id', 'nombre_categoria']
+            data = Categoria.query.all()
+            result = [{col: getattr(d, col) for col in cols} for d in data]
+
+            return jsonify(result)
+        except:
+            db.session.rollback()
+            return jsonify({"message": "error server", "status": 500}), 500
+        finally:
+            db.session.close()
+
+
+    @app.route('/product', methods=['POST'])
     # @login_required
     def createProducto():
-        if request.method == 'POST':
-            try:
-                name = request.get_json()['name']
-                precio = request.get_json()['precio']
-                categoria = request.get_json()['categoria']
-                producto = Catalogo(
-                    producto=name, precio=precio, categoria=categoria)
-                db.session.add(producto)
-                db.session.commit()
-                flash('Producto creado')
-            except:
-                db.session.rollback()
-                abort(500)
-            finally:
-                return redirect(url_for('admin'))
+        try:
+            name = request.get_json()['name']
+            precio = request.get_json()['precio']
+            categoria = request.get_json()['categoria']
+
+            producto = Catalogo(
+                producto=name, precio=precio, list_id=categoria)
+
+            db.session.add(producto)
+            db.session.commit()
+            flash('Producto creado')
+        except:
+            db.session.rollback()
+            return jsonify({"message": "error server", "status": 500}), 500
+        finally:
+            db.session.close()
+            return jsonify({"message": "success", "status": 201}), 201
 
 
-    # Ruta para crear Catalogos desde administrador(aun tiene errores)
-    @app.route('/insert', methods=['POST'])
+    @app.route('/product', methods=['GET'])
     # @login_required
-    def insert():
-        if request.method == 'POST':
-            try:
-                producto = request.get_json()['producto']
-                precio = request.get_json()['precio']
-                list_id = request.get_json()['categoria']
-                my_data = Catalogo(producto=producto,
-                                precio=precio, list_id=list_id)
-                db.session.add(my_data)
-                db.session.commit()
-                flash('Producto creado')
-            except:
-                db.session.rollback()
-                abort(500)
-            finally:
-                return redirect(url_for('admin'))
+    def getProductos():
+        try:
+            cols = ['id', 'producto', 'precio', 'list_id']
+            data = Catalogo.query.all()
+            result = [{col: getattr(d, col) for col in cols} for d in data]
+
+            return jsonify(result)
+        except:
+            db.session.rollback()
+            return jsonify({"message": "error server", "status": 500}), 500
+        finally:
+            db.session.close()
+
+
+    @app.route('/product/<id>', methods=['GET'])
+    # @login_required
+    def deleteProduct(id):
+        my_data = Catalogo.query.get(id)
+        db.session.delete(my_data)
+        db.session.commit()
+        return jsonify({"message": "success", "status": 200}), 200
 
 
     return app
