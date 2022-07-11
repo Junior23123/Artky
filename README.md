@@ -51,7 +51,8 @@ Librerías:
 - Werkzeug.security:<br>
   Esta libreria basicamente la hemos usado para hashear la contraseña.<br>
 - Flask_Migrate<br>
-- Pinia<br>
+- Pinia<br>Es un contenedor de composition API de Vue 3<br>
+- Axios<br>Es una librería de java script que facilita realizar peticiones http hacia nuestro servidor, pasando la configuración de la URL base<br>
 <br>
 Frameworks:<br>
 - JS -> Java Script <br>
