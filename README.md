@@ -6,9 +6,9 @@ Integrantes:
 - Yamileth Rincón
 - Alvaro Herrera
 
-# Descripción:
+# Descripción:<br>
 - Somos un grupo de estudiantes de UTEC que a través de "Artky" busca reivindicar la artesanía peruana, a través de un espacio que difunde las creaciones de nuestros artesanos asociados. En la página podrás encontrar el catálogo de artesanías de los miembros de nuestra comunidad.				
-
+<br>
 - La idea del proyecto nace a raíz de la pandemia cuando miles de artesanos sufieron pérdidas monetarias debido al confinamiento
 De esta manera, queremos ayudar con un granito de arena a la comunidad de artesanos peruanos.
 
@@ -52,18 +52,27 @@ Librerías:
   Esta libreria basicamente la hemos usado para hashear la contraseña.<br>
 - Flask_Migrate<br>
 - Psycopg2<br>
-
-Frameworks:
-- JS -> Java Script 
-- Python
-- Flask
+<br>
+Frameworks:<br>
+- JS -> Java Script <br>
+- Python<br>
+- Flask<br>
+<br>
+Frontend:<br>
+- Formatos json:<br>
+  - jsconfig.json<br>
+  - package-lock.json<br>
+  - package.json<br>
+- Javascript:<br>
+  - babel.config.js<br>
+  - vue.config.js<br>
+- Dependencia yarn.lock<br>
+<br>
 
 Database:
 - Postgresql
-
-# Nombre del script a ejecutar para iniciar la base de datos con datos.
-- app.py
-
+<br>
+Licencia: MIT<br>
 # Información acerca de los API.Requests y Responses de cada endpoint utilizado en el sistema.
 - API.Requests: 
   Usamos varios @app.route que reciben y retornan la información entre servidor y cliente.
