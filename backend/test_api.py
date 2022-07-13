@@ -1,5 +1,4 @@
 
-
 import json
 import unittest
 import requests
@@ -14,7 +13,8 @@ class TestApi(unittest.TestCase):
             "nombres": "test",
             "apellidos": "api",
             "correo": "test@gmail.com",
-            "contrasena": "123456"
+            "contrasena": "123456",
+            "tipo_usuario": "1",
         }
 
     def test_create_user(self):
@@ -50,7 +50,7 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(data['message'], 'success')
         self.assertEqual(
-            data['data'], {"name": self.login['nombres'], "email": self.login["correo"]})
+            data['data'], {"name": self.login['nombres'], "email": self.login["correo"], "typeUser": self.login["tipo_usuario"]})
         self.assertEqual(data['status'], 200)
         self.assertEqual(response.status_code, 200)
 
