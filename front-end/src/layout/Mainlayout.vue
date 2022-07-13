@@ -21,7 +21,7 @@
             :to="link.path"
             class="q-ml-sm"
           />
-          <ButtonCart/>
+          
           <ButtonLogout v-if="sessionStore.getIsLogin" />
         </div>
       </q-toolbar>
@@ -50,7 +50,7 @@
           <q-item-section> {{ link.label }} </q-item-section>
         </q-item>
         <ButtonCart class="q-ml-sm"/>
-        <ButtonLogout v-if="sessionStore.getIsLogin" />
+        <ButtonLogout v-if="sessionStore.getIsClient" />
       </q-list>
     </q-drawer>
 
@@ -63,7 +63,6 @@
 <script>
 import { computed, defineComponent, ref } from "@vue/runtime-core";
 import ButtonLogout from "@/components/ButtonLogout.vue";
-import ButtonCart from "@/components/ButtonCart.vue";
 import { useStoreSession } from "@/store/session";
 import { useRouter } from "vue-router";
 
@@ -71,7 +70,6 @@ export default defineComponent({
   name: "MainLayout",
   components: {
     ButtonLogout,
-    ButtonCart
   },
   setup() {
     const linksTopBar = [

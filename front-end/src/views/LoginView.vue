@@ -24,7 +24,7 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStoreSession } from "@/store/session";
-import { TYPE_USER_ADMIN } from "@/constants";
+import {  TYPE_USER_ADMIN } from "@/constants";
 
 export default defineComponent({
   name: "LoginView",
@@ -46,7 +46,7 @@ export default defineComponent({
           name:
             responseLogin.typeUser == TYPE_USER_ADMIN
               ? "AdminLayout"
-              : "Mainlayout",
+              : "ClientLayout",
         });
       }
     };

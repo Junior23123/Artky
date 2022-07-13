@@ -6,6 +6,8 @@ import RegisterView from "../views/RegisterView.vue";
 import HomeView from "../views/HomeView.vue";
 import CatalogueView from "../views/CatalogueView.vue";
 import UsuarioView from "../views/UsuarioView.vue";
+import ClientView from "../views/ClientView.vue";
+import ClientLayout from "../layout/ClientLayout.vue";
 
 import { useStoreSession } from "@/store/session";
 const routes = [
@@ -52,6 +54,19 @@ const routes = [
         path: "register",
         name: "RegisterAdmin",
         component: RegisterView,
+      },
+    ],
+  },
+  {
+    path: "/client",
+    name: "ClientLayout",
+    component: ClientLayout,
+    redirect: () => ({ name: "ClientView" }),
+    children: [
+      {
+        path: "",
+        name: "ClientView",
+        component: ClientView,
       },
     ],
   },
